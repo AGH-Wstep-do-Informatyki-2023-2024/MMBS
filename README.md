@@ -7,7 +7,7 @@ Projekt teamu MMBS
 
 ### Nasze inspiracje:
 
-Program będzie rozwijany na podstawie inspiracji z dotychczasowo dostępnych platform do gry w brydża. Interfejs programu zostanie zaprojektowany tak, aby był intuicyjny i użytkownikom łatwo było korzystać z funkcji analizy rozdań. Wykorzystanie grafik i kolorów w interfejsie będzie miało na celu zapewnienie czytelności i atrakcyjności wizualnej programu.
+**Program będzie rozwijany na podstawie inspiracji z dotychczasowo dostępnych platform do gry w brydża. Interfejs programu zostanie zaprojektowany tak, aby był intuicyjny i użytkownikom łatwo było korzystać z funkcji analizy rozdań. Wykorzystanie grafik i kolorów w interfejsie będzie miało na celu zapewnienie czytelności i atrakcyjności wizualnej programu.**
 
 
 #### Plan wdrożenia projektu:
