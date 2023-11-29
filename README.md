@@ -3,7 +3,7 @@ Projekt teamu MMBS
 
 Główny opis projektu:
 
-Projekt ma na celu stworzenie programu w języku Python z interfejsem, który umożliwi analizę rozdań w brydżu i wyznaczenie najlepszego możliwego kontraktu do zrealizowania przez daną parę.
+**Projekt ma na celu stworzenie programu w języku Python z interfejsem, który umożliwi analizę rozdań w brydżu i wyznaczenie najlepszego możliwego kontraktu do zrealizowania przez daną parę.**
 
 Nasze inspiracje:
 
