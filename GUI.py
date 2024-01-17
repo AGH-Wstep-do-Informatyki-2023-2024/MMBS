@@ -322,6 +322,7 @@ while True:
             clicked = 1
             player.CURRENTLY_PLAYING = "S"
     if ((N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn)%4) == 0 and (N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn) > 3:
+        pygame
         pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
     if ((N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn)%52) == 0 and (N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn) > 51: 
         player.USED_CARDS = []
