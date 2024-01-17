@@ -119,8 +119,7 @@ class Game:
         self.alert = alert      # atut
         self.score = score      # aktualny wynik - ilosc wygranych NS
         self.mid = []           # karty na srodku
-        self.to_end = len(north.hand)+len(west.hand)+len(south.hand) + \
-            len(east.hand)       # ilosc rund do konca
+        self.to_end = len(north.hand)+len(west.hand)+len(south.hand) + len(east.hand)       # ilosc rund do konca
         self.main_color = 0       # kolor 1. karty na srodku
 
     # ustawia losowa pozycje
@@ -206,6 +205,7 @@ class Game:
         return winner
 
     # wykonuje ruch zwraca -1 jeśli się nie udało wykonać 0 jeśli ruch został wykonany 1 jeśli gra po ruchu się zakończyła
+    #najwazniejsza funkcja (grajaca)
 
     def make_move(self, index):
         moves = self.players[self.on_move].possible_moves(self.main_color)
