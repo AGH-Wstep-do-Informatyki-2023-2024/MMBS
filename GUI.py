@@ -7,8 +7,6 @@ import time
 pygame.init()
 bridge = pygame.rect.Rect((700, 250), (400, 400))
 bridgev2 = pygame.rect.Rect((703, 253), (394, 394))
-players_N_S = ['N', 'S']
-players_E_W = ['E', 'W']
 if_clicked = 1
 clicked = 1
 gra_active = 0
@@ -22,10 +20,11 @@ FPS.tick(10)
 class player:
     COLOR = ["H", "C", "D", "S"]
     VALUE = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"]
+    PLAYERS = ["N", "E", "S", "W"]
     USED_CARDS = []
-    CURRENTLY_PLAYING = "S"
+    CURRENTLY_PLAYING = "W"
     
-    def __init__(self, position, rotation, size, position_on_table):
+    def __init__(self, position, rotation, size, position_on_table, who):
         self.position = position
         self.position_on_table = position_on_table
         self.rotation = rotation
@@ -33,6 +32,9 @@ class player:
         self.cards_pos = []
         self.cards_not_drawn = []
         self.cards_drawn = 0
+        self.winning_komunikat = pygame.image.load(f"E:\wstep_python\MMBS\komunikat_{who}.png")
+        self.winning_rect = self.winning_komunikat.get_rect()
+        self.winning_rect.center = (900,450)
         
     
     def card(self, i, place, player_rn):
@@ -187,10 +189,10 @@ class Button:
 
 
 
-N = player((710,150), 0, (100, 140), (850, 260))
-S = player((710,750), 0, (100, 140), (850, 500))
-E = player((1225, 640), 90, (140, 100), (940, 400))
-W = player((560, 280), 90, (140, 100), (720, 400))
+N = player((710,150), 0, (100, 140), (850, 260), "N")
+S = player((710,750), 0, (100, 140), (850, 500), "S")
+E = player((1225, 640), 90, (140, 100), (940, 400), "E")
+W = player((560, 280), 90, (140, 100), (720, 400), "W")
 
 
 f = 0
@@ -322,7 +324,20 @@ while True:
             clicked = 1
             player.CURRENTLY_PLAYING = "S"
     if ((N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn)%4) == 0 and (N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn) > 3:
-        pygame
+        time.sleep(2)
+        winner = player.PLAYERS[random.randint(0,3)]
+        if winner == "E":
+            DISPLAYSURF.blit(E.winning_komunikat, E.winning_rect)
+            time.sleep(2)
+        elif winner == "S":
+            DISPLAYSURF.blit(S.winning_komunikat, S.winning_rect)
+            time.sleep(2)
+        elif winner == "W":
+            DISPLAYSURF.blit(W.winning_komunikat, W.winning_rect)
+            time.sleep(2)
+        else:
+            DISPLAYSURF.blit(N.winning_komunikat, N.winning_rect)
+            time.sleep(2)
         pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
     if ((N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn)%52) == 0 and (N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn) > 51: 
         player.USED_CARDS = []
