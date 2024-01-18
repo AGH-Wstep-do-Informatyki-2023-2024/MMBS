@@ -185,7 +185,7 @@ class Game:
         
 
         # sprawdzenie atutu
-        """
+        
         for card in self.mid:
             if card//100 == self.alert//100:
                 possible_winners.append(card)
@@ -196,7 +196,7 @@ class Game:
             if winner % 2 == 0:
                 self.score += 1
             return winner
-        """
+        
 
         # jesli nie ma atutu
         for card in self.mid:

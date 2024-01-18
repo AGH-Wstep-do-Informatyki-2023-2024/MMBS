@@ -14,12 +14,17 @@ bridgev2 = pygame.rect.Rect((703, 253), (394, 394))
 if_clicked = 1
 clicked = 1
 gra_active = 0
-font = pygame.font.Font('freesansbold.ttf', 18)
+
 GREEN = (23, 117, 20)
 DISPLAYSURF = pygame.display.set_mode((1800,900))
 DISPLAYSURF.fill(GREEN)
 FPS = pygame.time.Clock()
 FPS.tick(10)
+
+
+
+
+
 
 class player_draw:
     COLOR = ["H", "C", "D", "S"]
@@ -174,40 +179,56 @@ class player_draw:
 
 
 class Button:
-    def __init__(self, text, x_pos, y_pos, enabled):
+    def __init__(self, text, x_pos, y_pos, enabled, size, font_size, distance_x, distance_y):
         self.text = text
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.enabled = enabled
-        self.draw_button()
+        self.size = size
+        self.font_size = font_size
+        self.distance_y = distance_y
+        self.distance_x = distance_x
+        self.font = pygame.font.Font('freesansbold.ttf', self.font_size)
+        
         
 
     def draw_button(self):
         
-        button_text = font.render(self.text, True, 'black')
-        button_rect = pygame.rect.Rect((self.x_pos, self.y_pos), (150, 25))
+        button_text = self.font.render(self.text, True, 'black')
+        button_rect = pygame.rect.Rect((self.x_pos, self.y_pos), self.size)
         if self.check_click() or if_clicked == 0:
             pygame.draw.rect(DISPLAYSURF, GREEN , button_rect, 0, 5)
             pygame.draw.rect(DISPLAYSURF, GREEN , button_rect, 2, 5)
-            button_text = font.render(self.text, True, GREEN)
-            DISPLAYSURF.blit(button_text, (self.x_pos + 3, self.y_pos +3))
+            button_text = self.font.render(self.text, True, GREEN)
+            DISPLAYSURF.blit(button_text, (self.x_pos + self.distance_x, self.y_pos + self.distance_y))
 
             
         else: 
-            pygame.draw.rect(DISPLAYSURF, 'gray', button_rect, 0, 5)
+            pygame.draw.rect(DISPLAYSURF, 'white', button_rect, 0, 5)
             pygame.draw.rect(DISPLAYSURF, 'black', button_rect, 2, 5)
             
 
-        DISPLAYSURF.blit(button_text, (self.x_pos + 3, self.y_pos +3))
+        DISPLAYSURF.blit(button_text, (self.x_pos + self.distance_x, self.y_pos + self.distance_y))
 
     def check_click(self):
         mouse_pos = pygame.mouse.get_pos()
         left_click = pygame.mouse.get_pressed()[0]
-        button_rect = pygame.rect.Rect((self.x_pos, self.y_pos), (150, 25))
+        button_rect = pygame.rect.Rect((self.x_pos, self.y_pos), self.size)
         if left_click and button_rect.collidepoint(mouse_pos) and self.enabled:
             return True
         else:
             return False
+        
+
+class picture:
+    def __init__(self, size, center, image_name):
+        self.image_loaded = pygame.image.load(f"\{image_name}")
+        self.image_loaded = pygame.transform.scale(self.image_loaded, size)
+        self.rect = self.image_loaded.get_rect()
+        self.rect.center = center
+    def draw_image(self):
+        DISPLAYSURF.blit(self.image_loaded, self.rect)
+
         
     
 

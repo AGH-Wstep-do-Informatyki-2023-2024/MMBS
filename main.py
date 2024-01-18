@@ -2,7 +2,6 @@ import game,GUI
 import pygame
 from pygame.locals import *
 import sys
-import random
 import time
 import copy
 
@@ -17,6 +16,7 @@ bridgev2 = pygame.rect.Rect((703, 253), (394, 394))
 if_clicked = 1
 clicked = 1
 gra_active = 0
+button_not_clicked = 0
 font = pygame.font.Font('freesansbold.ttf', 18)
 GREEN = (23, 117, 20)
 DISPLAYSURF = pygame.display.set_mode((1800,900))
@@ -55,15 +55,58 @@ N.update_hand(main_game.players[0].hand)
 S.update_hand(main_game.players[2].hand)
 E.update_hand(main_game.players[1].hand)
 W.update_hand(main_game.players[3].hand)
+my_button = GUI.Button('Rozdaj karty', 100, 100, True, (150,30), 18, 3, 3)
+diamonds_button = GUI.Button('Diamonds', 715, 450, True, (75,75), 9,  15 ,63)
+diamonds_icon = GUI.picture((50,50), (715, 450), "znaki\diamonds.png")
+hearts_button = GUI.Button('Hearts', 815, 450, True, (75,75), 9,  23, 63)
+hearts_icon = GUI.picture((50,50), (815, 450), "znaki\hearts.png")
+spades_button = GUI.Button('Spades', 915, 450, True, (75,75), 9,  20 ,63)
+spades_icon = GUI.picture((50,50), (915, 450), "znaki\spades.png")
+clubs_button = GUI.Button('Clubs', 1015, 450, True, (75,75), 9, 25 ,63)
+clubs_icon = GUI.picture((50,50), (1015, 450), "znaki\clubs.png")
+
+
 
 
 
 while True:
-    my_button = GUI.Button('Rozdaj karty', 100, 100, True)
+    
     mx, my = pygame.mouse.get_pos()
     
     pygame.draw.rect(DISPLAYSURF, 'black' , bridge , 2, 5)
     
+    if button_not_clicked == 0:
+        diamonds_button.draw_button()
+        diamonds_icon.draw_image()
+        hearts_button.draw_button()
+        hearts_icon.draw_image()
+        spades_button.draw_button()
+        spades_icon.draw_image()
+        clubs_button.draw_button()
+        clubs_icon.draw_image()
+        if diamonds_button.check_click():
+            print("D")
+            pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
+            button_not_clicked = 1
+            time.sleep(0.2)
+        elif clubs_button.check_click():
+            print("C")
+            pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
+            button_not_clicked = 1
+            time.sleep(0.2)
+        elif hearts_button.check_click():
+            print("H")
+            pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
+            button_not_clicked = 1
+            time.sleep(0.2)
+        elif spades_button.check_click():
+            print("S")
+            time.sleep(0.2)
+            pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
+            button_not_clicked = 1
+        
+
+
     if ((N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn)%4) == 0 and (N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn) > 3 and lewa_done == 1:
         print(winner)
         lewa_done = 0
