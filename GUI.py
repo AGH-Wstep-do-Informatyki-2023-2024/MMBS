@@ -5,6 +5,8 @@ import random
 import time
 
 pygame.init()
+lewa = 1
+lewa_done = 0
 bridge = pygame.rect.Rect((700, 250), (400, 400))
 bridgev2 = pygame.rect.Rect((703, 253), (394, 394))
 if_clicked = 1
@@ -32,13 +34,14 @@ class player:
         self.cards_pos = []
         self.cards_not_drawn = []
         self.cards_drawn = 0
-        self.winning_komunikat = pygame.image.load(f"E:\wstep_python\MMBS\komunikat_{who}.png")
+        self.winning_komunikat = pygame.image.load(f"komunikat{who}.png")
+        self.winning_komunikat = pygame.transform.scale(self.winning_komunikat, (100, 75))
         self.winning_rect = self.winning_komunikat.get_rect()
         self.winning_rect.center = (900,450)
         
     
     def card(self, i, place, player_rn):
-        self.image = pygame.image.load(f"E:\wstep_python\MMBS\karty\{i}.png")
+        self.image = pygame.image.load(f"karty\{i}.png")
         self.image = pygame.transform.rotate(self.image, self.rotation)
         self.image = pygame.transform.scale(self.image, self.size)
         self.rect = self.image.get_rect()
@@ -132,7 +135,7 @@ class player:
 
 
     def draw_on_table(self, card, h):
-        image_on_table = pygame.image.load(f"E:\wstep_python\MMBS\karty\{card}.png")
+        image_on_table = pygame.image.load(f"karty\{card}.png")
         
         image_on_table = pygame.transform.rotate(image_on_table, self.rotation)
         image_on_table = pygame.transform.scale(image_on_table, self.size)
@@ -251,6 +254,7 @@ while True:
             N_place = (0, 0)
     if player.CURRENTLY_PLAYING == "N" and gra_active == 1:
         if N.card_click_check((660,80), (len(N.hand)*30)+70, 140) and clicked == 1 :
+            
             clicked = 0
             card_clicked = N.which_card_clicked() 
             for card_drawn in N.hand:    
@@ -267,8 +271,10 @@ while True:
             time.sleep(0.2)
             clicked = 1
             player.CURRENTLY_PLAYING = "E"
+            lewa_done += 1
     elif player.CURRENTLY_PLAYING == "S" and gra_active == 1:   
         if S.card_click_check((660,680), (len(S.hand)*30)+70, 140) and clicked == 1 :
+            
             clicked = 0
             card_clicked = S.which_card_clicked() 
             for card_drawn in S.hand:    
@@ -285,9 +291,11 @@ while True:
             time.sleep(0.2)
             clicked = 1
             player.CURRENTLY_PLAYING = "W"
+            lewa_done += 1
     elif player.CURRENTLY_PLAYING == "W" and gra_active == 1:
         if W.card_click_check((490, 230), 140, (len(W.hand)*30)+70) and clicked == 1 :
             clicked = 0
+            
             card_clicked = W.which_card_clicked() 
             for card_drawn in W.hand:    
                 if card_clicked == card_drawn:
@@ -303,6 +311,7 @@ while True:
             time.sleep(0.2)
             clicked = 1
             player.CURRENTLY_PLAYING = "N"
+            lewa_done += 1
     elif player.CURRENTLY_PLAYING == "E" and gra_active == 1:
         if E.card_click_check((1155, 230+(E.cards_drawn*30)), 140, (len(E.hand)*30)+70) and clicked == 1 :
             
@@ -323,9 +332,12 @@ while True:
             time.sleep(0.2)
             clicked = 1
             player.CURRENTLY_PLAYING = "S"
-    if ((N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn)%4) == 0 and (N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn) > 3:
-        time.sleep(2)
+            lewa_done += 1
+    if ((N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn)%4) == 0 and (N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn) > 3 and lewa_done*lewa == 4*lewa and lewa_done>3 :
+        lewa += 1
+        lewa_done = 1
         winner = player.PLAYERS[random.randint(0,3)]
+        print(winner)
         if winner == "E":
             DISPLAYSURF.blit(E.winning_komunikat, E.winning_rect)
             time.sleep(2)
