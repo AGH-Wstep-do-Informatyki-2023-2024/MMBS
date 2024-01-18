@@ -34,8 +34,8 @@ class player:
         self.cards_pos = []
         self.cards_not_drawn = []
         self.cards_drawn = 0
-        self.winning_komunikat = pygame.image.load(f"komunikat{who}.png")
-        self.winning_komunikat = pygame.transform.scale(self.winning_komunikat, (100, 75))
+        self.winning_komunikat = pygame.image.load(f"komunikaty\komunikat{who}.png")
+        self.winning_komunikat = pygame.transform.scale(self.winning_komunikat, (200, 100))
         self.winning_rect = self.winning_komunikat.get_rect()
         self.winning_rect.center = (900,450)
         
