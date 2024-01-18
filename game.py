@@ -113,13 +113,13 @@ class Game:
     # mid - tablica przechowujaca karty ktore zostały zagrane w tej lewie
     # to_end - ilosc kart która nie zostały jeszcze zagrane
     # main_color - kolor 1. karty na środku
-    def __init__(self, north=copy.copy(Player()), west=copy.copy(Player()), south=copy.copy(Player()), east=copy.copy(Player()), on_move=0, alert=0, score=0):
-        self.players = [north, east, south, west]
+    def __init__(self, N_player=copy.copy(Player()), W_player=copy.copy(Player()), S_player=copy.copy(Player()), E_player=copy.copy(Player()), on_move=0, alert=0, score=0):
+        self.players = [N_player, W_player, S_player, E_player]
         self.on_move = on_move  # kto jest na ruchu
         self.alert = alert      # atut
         self.score = score      # aktualny wynik - ilosc wygranych NS
         self.mid = []           # karty na srodku
-        self.to_end = len(north.hand)+len(west.hand)+len(south.hand) + len(east.hand)       # ilosc rund do konca
+        self.to_end = len(N_player.hand)+len(W_player.hand)+len(S_player.hand) + len(E_player.hand)       # ilosc rund do konca
         self.main_color = 0       # kolor 1. karty na srodku
 
     # ustawia losowa pozycje
@@ -150,6 +150,8 @@ class Game:
                 self.players[j].hand.append(card)
                 left.remove(card)
         self.to_end = 52
+        for k in range(0,4):
+            self.players[k].hand = sorted(self.players[k].hand, reverse=True)
 
     # zamienia pozycje w postaci klasy Game do tablicy postaci [atut/100, on_move, i położenie 52 kart ( -1 została zagrana, 0-N, 1-E, 2-S, 3-W, 5- na środku ) w kolejnosci 2-A i C->D->H->S]
 
@@ -179,9 +181,11 @@ class Game:
         self.main_color = 0
         first = (self.on_move+1) % 4
         possible_winners = []
-        main_color = self.mid[0]//100
+        main_color = self.mid[0] // 100
+        
 
         # sprawdzenie atutu
+        """
         for card in self.mid:
             if card//100 == self.alert//100:
                 possible_winners.append(card)
@@ -192,6 +196,7 @@ class Game:
             if winner % 2 == 0:
                 self.score += 1
             return winner
+        """
 
         # jesli nie ma atutu
         for card in self.mid:
@@ -199,6 +204,7 @@ class Game:
                 possible_winners.append(card)
         best = max(possible_winners)
         winner = (self.mid.index(best)+first) % 4
+        
         self.on_move = winner
         if winner % 2 == 0:
             self.score += 1
@@ -209,15 +215,19 @@ class Game:
 
     def make_move(self, index):
         moves = self.players[self.on_move].possible_moves(self.main_color)
-        if index >= len(moves):
-            return -1
-        move = moves[index]
+        print(moves)
+        #if index >= len(moves):
+            #return -1
+        move = self.players[self.on_move].hand[index] #move = moves[index]
+        
         self.mid.append(move)
+        
         self.players[self.on_move].hand.remove(move)
 
         if len(self.mid) == 4:
-            self.eval_mid()
+            winner = self.eval_mid()
             self.mid.clear()
+            return winner
         else:
             self.on_move = (self.on_move+1) % 4
         if len(self.mid) == 1:
