@@ -34,10 +34,11 @@ class player:
         self.cards_pos = []
         self.cards_not_drawn = []
         self.cards_drawn = 0
-        self.winning_komunikat = pygame.image.load(f"komunikaty\komunikat{who}.png")
-        self.winning_komunikat = pygame.transform.scale(self.winning_komunikat, (200, 100))
-        self.winning_rect = self.winning_komunikat.get_rect()
-        self.winning_rect.center = (900,450)
+        self.who = who
+        
+        
+       
+        
         
     
     def card(self, i, place, player_rn):
@@ -54,6 +55,7 @@ class player:
             
         else:
             self.cards_pos = self.cards_pos + [y - 50]
+        
             
 
 
@@ -61,6 +63,15 @@ class player:
     def draw(self, surface):
         surface.blit(self.image, self.rect)
         pygame.draw.rect(DISPLAYSURF, 'black' , self.rect , 1, 1)
+    
+    def winning_display(self):
+        winning_komunikat = pygame.image.load(f"komunikaty\komunikat{self.who}.png")
+        winning_komunikat = pygame.transform.scale(winning_komunikat, (380, 125))
+        winning_rect = winning_komunikat.get_rect()
+        winning_rect.center = (900,450)
+        DISPLAYSURF.blit(winning_komunikat, winning_rect)
+        
+
     
     def hand(self):
         self.hand = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -74,7 +85,10 @@ class player:
                         flag = 0
             player.USED_CARDS.append(self.hand[i])
             self.cards_not_drawn.append(self.hand[i])
-            
+    
+    def sort_hand(self):
+        suits_order = {'H': 0, 'D': 1, 'S': 2, 'C': 3}
+        self.hand.sort(key=lambda x: (suits_order[x[0]], player.VALUE.index(x[1:])))        
         
     
     def card_click_check(self, player_pos, hitbox_lengh, hitbox_width):
@@ -206,6 +220,10 @@ N.hand()
 S.hand()
 E.hand()
 W.hand()
+N.sort_hand()
+S.sort_hand()
+E.sort_hand()
+W.sort_hand()
 
 
 
@@ -215,10 +233,33 @@ while True:
     mx, my = pygame.mouse.get_pos()
     
     pygame.draw.rect(DISPLAYSURF, 'black' , bridge , 2, 5)
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
+    
+    if ((N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn)%4) == 0 and (N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn) > 3 and lewa_done == 1:
+        lewa_done = 0
+        time.sleep(1)
+        #wyswietlanie wygranego do zrobienia tutaj i licznik punktow, gui gotowe
+        pygame.display.update()
+        time.sleep(2)
+        pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
+    if ((N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn)%52) == 0 and (N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn) > 51: 
+        player.USED_CARDS = []
+        N = player((710,150), 0, (100, 140), (850, 260), "N")
+        S = player((710,750), 0, (100, 140), (850, 500), "S")
+        E = player((1225, 640), 90, (140, 100), (940, 400), "E")
+        W = player((560, 280), 90, (140, 100), (720, 400), "W")
+        if_clicked = 1
+        gra_active = 0
+        N.hand()
+        S.hand()
+        E.hand()
+        W.hand()
+        N.sort_hand()
+        S.sort_hand()
+        E.sort_hand()
+        W.sort_hand()
+    
+    
+    
     if (my_button.check_click()) and if_clicked == 1:
             gra_active = 1
             for g in N.hand:
@@ -271,7 +312,8 @@ while True:
             time.sleep(0.2)
             clicked = 1
             player.CURRENTLY_PLAYING = "E"
-            lewa_done += 1
+            lewa_done = 1
+            
     elif player.CURRENTLY_PLAYING == "S" and gra_active == 1:   
         if S.card_click_check((660,680), (len(S.hand)*30)+70, 140) and clicked == 1 :
             
@@ -291,7 +333,8 @@ while True:
             time.sleep(0.2)
             clicked = 1
             player.CURRENTLY_PLAYING = "W"
-            lewa_done += 1
+            lewa_done = 1
+           
     elif player.CURRENTLY_PLAYING == "W" and gra_active == 1:
         if W.card_click_check((490, 230), 140, (len(W.hand)*30)+70) and clicked == 1 :
             clicked = 0
@@ -311,7 +354,8 @@ while True:
             time.sleep(0.2)
             clicked = 1
             player.CURRENTLY_PLAYING = "N"
-            lewa_done += 1
+            lewa_done = 1
+            
     elif player.CURRENTLY_PLAYING == "E" and gra_active == 1:
         if E.card_click_check((1155, 230+(E.cards_drawn*30)), 140, (len(E.hand)*30)+70) and clicked == 1 :
             
@@ -332,36 +376,13 @@ while True:
             time.sleep(0.2)
             clicked = 1
             player.CURRENTLY_PLAYING = "S"
-            lewa_done += 1
-    if ((N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn)%4) == 0 and (N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn) > 3 and lewa_done*lewa == 4*lewa and lewa_done>3 :
-        lewa += 1
-        lewa_done = 1
-        winner = player.PLAYERS[random.randint(0,3)]
-        print(winner)
-        if winner == "E":
-            DISPLAYSURF.blit(E.winning_komunikat, E.winning_rect)
-            time.sleep(2)
-        elif winner == "S":
-            DISPLAYSURF.blit(S.winning_komunikat, S.winning_rect)
-            time.sleep(2)
-        elif winner == "W":
-            DISPLAYSURF.blit(W.winning_komunikat, W.winning_rect)
-            time.sleep(2)
-        else:
-            DISPLAYSURF.blit(N.winning_komunikat, N.winning_rect)
-            time.sleep(2)
-        pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
-    if ((N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn)%52) == 0 and (N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn) > 51: 
-        player.USED_CARDS = []
-        N = player((710,150), 0, (100, 140), (850, 260))
-        S = player((710,750), 0, (100, 140), (850, 500))
-        E = player((1225, 640), 90, (140, 100), (940, 400))
-        W = player((560, 280), 90, (140, 100), (720, 400))
-        if_clicked = 1
-        gra_active = 0
-        N.hand()
-        S.hand()
-        E.hand()
-        W.hand()
+            lewa_done = 1
+    
+    
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()      
+    
           
     pygame.display.update()
