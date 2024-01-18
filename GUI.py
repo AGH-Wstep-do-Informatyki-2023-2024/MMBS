@@ -19,7 +19,7 @@ DISPLAYSURF.fill(GREEN)
 FPS = pygame.time.Clock()
 FPS.tick(10)
 
-class player:
+class player_draw:
     COLOR = ["H", "C", "D", "S"]
     VALUE = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"]
     PLAYERS = ["N", "E", "S", "W"]
@@ -27,14 +27,13 @@ class player:
     CURRENTLY_PLAYING = "W"
     
     def __init__(self, position, rotation, size, position_on_table, who):
-        self.position = position
-        self.position_on_table = position_on_table
-        self.rotation = rotation
-        self.size = size
-        self.cards_pos = []
-        self.cards_not_drawn = []
-        self.cards_drawn = 0
-        self.who = who
+        self.position = position ## gdzie karty    
+        self.position_on_table = position_on_table #miejsce na środku 
+        self.rotation = rotation    
+        self.size = size #rozmiar karty
+        self.cards_pos = []     #pozycje kart w ręce 
+        self.cards_drawn = 0    #ile kart od gracza 
+        self.who = who  # Nazwa gracza
         
         
        
@@ -78,17 +77,16 @@ class player:
         for i in range(0,13):
             flag = 0
             while flag == 0:
-                self.hand[i] = player.COLOR[random.randint(0,3)] + player.VALUE[random.randint(0,12)]
+                self.hand[i] = player_draw.COLOR[random.randint(0,3)] + player_draw.VALUE[random.randint(0,12)]
                 flag = 1
-                for x in player.USED_CARDS:
+                for x in player_draw.USED_CARDS:
                     if self.hand[i] == x:
                         flag = 0
-            player.USED_CARDS.append(self.hand[i])
-            self.cards_not_drawn.append(self.hand[i])
+            player_draw.USED_CARDS.append(self.hand[i])
     
     def sort_hand(self):
         suits_order = {'H': 0, 'D': 1, 'S': 2, 'C': 3}
-        self.hand.sort(key=lambda x: (suits_order[x[0]], player.VALUE.index(x[1:])))        
+        self.hand.sort(key=lambda x: (suits_order[x[0]], player_draw.VALUE.index(x[1:])))        
         
     
     def card_click_check(self, player_pos, hitbox_lengh, hitbox_width):
@@ -111,7 +109,7 @@ class player:
         
         h = 0
         
-        if player.CURRENTLY_PLAYING == "S" or player.CURRENTLY_PLAYING == "N":
+        if player_draw.CURRENTLY_PLAYING == "S" or player_draw.CURRENTLY_PLAYING == "N":
             for card_pos_x in self.cards_pos:
                 if x - card_pos_x > 0 and x - card_pos_x < 30 :
                     self.cards_pos = []
@@ -123,7 +121,7 @@ class player:
                     return self.hand[h]
                 
                 h += 1
-        elif player.CURRENTLY_PLAYING == "W":
+        elif player_draw.CURRENTLY_PLAYING == "W":
             for card_pos_y in self.cards_pos:
                 if y - card_pos_y > 0 and y - card_pos_y < 30 :
                     self.cards_pos = []
@@ -135,7 +133,7 @@ class player:
                     return self.hand[h]
                 
                 h += 1
-        elif player.CURRENTLY_PLAYING == "E":
+        elif player_draw.CURRENTLY_PLAYING == "E":
             for card_pos_y in self.cards_pos:
                 if abs(y - card_pos_y) < 30:
                     self.cards_pos = []
@@ -154,16 +152,15 @@ class player:
         image_on_table = pygame.transform.rotate(image_on_table, self.rotation)
         image_on_table = pygame.transform.scale(image_on_table, self.size)
         rect = image_on_table.get_rect()
-        if player.CURRENTLY_PLAYING == "W" or player.CURRENTLY_PLAYING == "E":
+        if player_draw.CURRENTLY_PLAYING == "W" or player_draw.CURRENTLY_PLAYING == "E":
             rect.center = tuple(x + y for x, y in zip(self.position_on_table, (70,50)))
-        elif player.CURRENTLY_PLAYING == "S" or player.CURRENTLY_PLAYING == "N":
+        elif player_draw.CURRENTLY_PLAYING == "S" or player_draw.CURRENTLY_PLAYING == "N":
             rect.center = tuple(x + y for x, y in zip(self.position_on_table, (50,70)))
         DISPLAYSURF.blit(image_on_table, self.position_on_table)
         pygame.draw.rect(DISPLAYSURF, 'black' , rect , 1, 1)
         self.hand.remove(self.hand[h])
         
         
-
 
 
 class Button:
@@ -205,11 +202,11 @@ class Button:
     
 
 
-
-N = player((710,150), 0, (100, 140), (850, 260), "N")
-S = player((710,750), 0, (100, 140), (850, 500), "S")
-E = player((1225, 640), 90, (140, 100), (940, 400), "E")
-W = player((560, 280), 90, (140, 100), (720, 400), "W")
+'''
+N = player_draw((710,150), 0, (100, 140), (850, 260), "N")
+S = player_draw((710,750), 0, (100, 140), (850, 500), "S")
+E = player_draw((1225, 640), 90, (140, 100), (940, 400), "E")
+W = player_draw((560, 280), 90, (140, 100), (720, 400), "W")
 
 
 f = 0
@@ -242,11 +239,11 @@ while True:
         time.sleep(2)
         pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
     if ((N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn)%52) == 0 and (N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn) > 51: 
-        player.USED_CARDS = []
-        N = player((710,150), 0, (100, 140), (850, 260), "N")
-        S = player((710,750), 0, (100, 140), (850, 500), "S")
-        E = player((1225, 640), 90, (140, 100), (940, 400), "E")
-        W = player((560, 280), 90, (140, 100), (720, 400), "W")
+        player_draw.USED_CARDS = []
+        N = player_draw((710,150), 0, (100, 140), (850, 260), "N")
+        S = player_draw((710,750), 0, (100, 140), (850, 500), "S")
+        E = player_draw((1225, 640), 90, (140, 100), (940, 400), "E")
+        W = player_draw((560, 280), 90, (140, 100), (720, 400), "W")
         if_clicked = 1
         gra_active = 0
         N.hand()
@@ -293,7 +290,7 @@ while True:
                 N_place = tuple(x - y for x, y in zip(N_place, change2))
             time.sleep(0.2)   
             N_place = (0, 0)
-    if player.CURRENTLY_PLAYING == "N" and gra_active == 1:
+    if player_draw.CURRENTLY_PLAYING == "N" and gra_active == 1:
         if N.card_click_check((660,80), (len(N.hand)*30)+70, 140) and clicked == 1 :
             
             clicked = 0
@@ -311,10 +308,10 @@ while True:
                     N_place = (0, 0)
             time.sleep(0.2)
             clicked = 1
-            player.CURRENTLY_PLAYING = "E"
+            player_draw.CURRENTLY_PLAYING = "E"
             lewa_done = 1
             
-    elif player.CURRENTLY_PLAYING == "S" and gra_active == 1:   
+    elif player_draw.CURRENTLY_PLAYING == "S" and gra_active == 1:   
         if S.card_click_check((660,680), (len(S.hand)*30)+70, 140) and clicked == 1 :
             
             clicked = 0
@@ -332,10 +329,10 @@ while True:
                     N_place = (0, 0)
             time.sleep(0.2)
             clicked = 1
-            player.CURRENTLY_PLAYING = "W"
+            player_draw.CURRENTLY_PLAYING = "W"
             lewa_done = 1
            
-    elif player.CURRENTLY_PLAYING == "W" and gra_active == 1:
+    elif player_draw.CURRENTLY_PLAYING == "W" and gra_active == 1:
         if W.card_click_check((490, 230), 140, (len(W.hand)*30)+70) and clicked == 1 :
             clicked = 0
             
@@ -353,10 +350,10 @@ while True:
                     N_place = (0, 0)
             time.sleep(0.2)
             clicked = 1
-            player.CURRENTLY_PLAYING = "N"
+            player_draw.CURRENTLY_PLAYING = "N"
             lewa_done = 1
             
-    elif player.CURRENTLY_PLAYING == "E" and gra_active == 1:
+    elif player_draw.CURRENTLY_PLAYING == "E" and gra_active == 1:
         if E.card_click_check((1155, 230+(E.cards_drawn*30)), 140, (len(E.hand)*30)+70) and clicked == 1 :
             
             clicked = 0
@@ -375,7 +372,7 @@ while True:
                     N_place = (0, 0)
             time.sleep(0.2)
             clicked = 1
-            player.CURRENTLY_PLAYING = "S"
+            player_draw.CURRENTLY_PLAYING = "S"
             lewa_done = 1
     
     
@@ -386,3 +383,4 @@ while True:
     
           
     pygame.display.update()
+'''
