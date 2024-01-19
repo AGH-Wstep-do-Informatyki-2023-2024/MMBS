@@ -221,13 +221,24 @@ class Button:
         
 
 class picture:
-    def __init__(self, size, center, image_name):
-        self.image_loaded = pygame.image.load(f"\{image_name}")
+    def __init__(self, size, center, image_name, rotation):
+        self.image_loaded = pygame.image.load(f"{image_name}")
         self.image_loaded = pygame.transform.scale(self.image_loaded, size)
+        self.image_loaded = pygame.transform.rotate(self.image_loaded, rotation)
         self.rect = self.image_loaded.get_rect()
         self.rect.center = center
+        
     def draw_image(self):
         DISPLAYSURF.blit(self.image_loaded, self.rect)
+
+class text:
+    def __init__(self, font_size, text, text_place):
+        self.font = pygame.font.Font('freesansbold.ttf', font_size)
+        self.text = text
+        self.text_place = text_place
+        self.text = self.font.render(self.text, True, 'black')
+    def write_text(self):
+        DISPLAYSURF.blit(self.text, self.text_place)
 
         
     

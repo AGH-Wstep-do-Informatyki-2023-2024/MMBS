@@ -125,6 +125,7 @@ class Game:
     # ustawia losowa pozycje
 
     def setrandom(self, alert=-1, onmove=-1):
+        """
         if alert == -1:
             self.alert = random.randint(0, 4)*100
         elif alert <= 4 and alert >= 0:
@@ -133,6 +134,7 @@ class Game:
             self.alert-alert
         else:
             return
+        """
 
         if onmove == -1:
             self.on_move = random.randint(0, 3)

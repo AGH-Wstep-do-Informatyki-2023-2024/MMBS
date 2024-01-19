@@ -11,6 +11,7 @@ import copy
 pygame.init()
 lewa = 1
 lewa_done = 0
+atut_kwadrat = pygame.rect.Rect((198, 68), (104, 104))
 bridge = pygame.rect.Rect((700, 250), (400, 400))
 bridgev2 = pygame.rect.Rect((703, 253), (394, 394))
 if_clicked = 1
@@ -49,33 +50,78 @@ change2 = (0,30)
 
 main_game = game.Game(N_player=copy.copy(game.Player()),W_player=copy.copy(game.Player()),S_player=copy.copy(game.Player()),E_player=copy.copy(game.Player()))
 main_game.setrandom()
-print(main_game.players[0].hand)
-print(main_game.on_move)
 N.update_hand(main_game.players[0].hand)
 S.update_hand(main_game.players[2].hand)
 E.update_hand(main_game.players[1].hand)
 W.update_hand(main_game.players[3].hand)
-my_button = GUI.Button('Rozdaj karty', 100, 100, True, (150,30), 18, 3, 3)
+my_button = GUI.Button('Rozdaj karty', 830, 420, True, (150,30), 18, 3, 3)
 diamonds_button = GUI.Button('Diamonds', 715, 450, True, (75,75), 9,  15 ,63)
-diamonds_icon = GUI.picture((50,50), (715, 450), "znaki\diamonds.png")
+diamonds_icon = GUI.picture((50,50), (753, 480), "znaki\diamonds.png",0)
+atut_diamonds_icon = GUI.picture((100,100), (250, 120), "znaki\diamonds.png",0)
+
 hearts_button = GUI.Button('Hearts', 815, 450, True, (75,75), 9,  23, 63)
-hearts_icon = GUI.picture((50,50), (815, 450), "znaki\hearts.png")
+hearts_icon = GUI.picture((50,50), (853, 480), "znaki\hearts.png",0)
+atut_hearts_icon = GUI.picture((100,100), (250, 120), "znaki\hearts.png",0)
+
 spades_button = GUI.Button('Spades', 915, 450, True, (75,75), 9,  20 ,63)
-spades_icon = GUI.picture((50,50), (915, 450), "znaki\spades.png")
+spades_icon = GUI.picture((50,50), (953, 480), "znaki\spades.png",0)
+atut_spades_icon = GUI.picture((100,100), (250, 120), "znaki\spades.png",0)
+
+
 clubs_button = GUI.Button('Clubs', 1015, 450, True, (75,75), 9, 25 ,63)
-clubs_icon = GUI.picture((50,50), (1015, 450), "znaki\clubs.png")
+clubs_icon = GUI.picture((50,50), (1053, 480), "znaki\clubs.png",0)
+atut_clubs_icon = GUI.picture((100,100), (250, 120), "znaki\clubs.png",0)
 
+komunikat_text = GUI.text(22, "Rozgrywajacy to South", (780, 300))
+choose_text = GUI.text(22, "Wybierz z jakim atutem zagrasz: ", (720, 350))
+atut = GUI.text(30, "Atut:", (100,100))
 
+koncowy_komunikat = GUI.picture((250, 100), (900, 450), "komunikaty\komunikat.png", 0)
+
+turn_arrow_N = GUI.picture((25,13), (900, 235), "znaki\strzalka.png", 90 )
+turn_arrow_E = GUI.picture((25,13), (1120, 450), "znaki\strzalka.png", 0 )
+turn_arrow_S = GUI.picture((25,13), (900, 665), "znaki\strzalka.png", 270 )
+turn_arrow_W = GUI.picture((25,13), (680, 450), "znaki\strzalka.png", 180 )
+
+main_game.on_move = 3
 
 
 
 while True:
+    lewy_text = GUI.text(20, f"Lewy S/N: {main_game.score} ", (715, 600))
+    koncowy_wynik_EW = 13 - main_game.score
+    koncowy_stan_gry = GUI.text(20, f"Lewy S/N: {main_game.score}, lewy W/E: {koncowy_wynik_EW}", (778,448))
     
+    if gra_active == 1:
+        lewy_text.write_text()
+        if main_game.on_move == 0: #N
+            pygame.draw.rect(DISPLAYSURF, GREEN , ((667, 444), (26,13)) , 0, 0) #W
+            pygame.draw.rect(DISPLAYSURF, GREEN , ((1107, 444), (26,13)) , 0, 0) #E
+            pygame.draw.rect(DISPLAYSURF, GREEN , ((894, 652), (14,26)) , 0, 0) #S
+            turn_arrow_N.draw_image() 
+        if main_game.on_move == 1: #E
+            pygame.draw.rect(DISPLAYSURF, GREEN , ((894, 222), (14,26)) , 0, 0) #N
+            pygame.draw.rect(DISPLAYSURF, GREEN , ((667, 444), (26,13)) , 0, 0) #W
+            pygame.draw.rect(DISPLAYSURF, GREEN , ((894, 652), (14,26)) , 0, 0) #S
+            turn_arrow_E.draw_image()
+        if main_game.on_move == 2: #S
+            pygame.draw.rect(DISPLAYSURF, GREEN , ((1107, 444), (26,13)) , 0, 0) #E
+            pygame.draw.rect(DISPLAYSURF, GREEN , ((667, 444), (26,13)) , 0, 0) #W
+            pygame.draw.rect(DISPLAYSURF, GREEN , ((894, 222), (14,26)) , 0, 0) #N
+            turn_arrow_S.draw_image()
+        if main_game.on_move == 3: #W
+            pygame.draw.rect(DISPLAYSURF, GREEN , ((894, 652), (14,26)) , 0, 0) #S
+            pygame.draw.rect(DISPLAYSURF, GREEN , ((1107, 444), (26,13)) , 0, 0) #E
+            pygame.draw.rect(DISPLAYSURF, GREEN , ((894, 222), (14,26)) , 0, 0) #N
+            turn_arrow_W.draw_image() 
+
     mx, my = pygame.mouse.get_pos()
     
     pygame.draw.rect(DISPLAYSURF, 'black' , bridge , 2, 5)
     
     if button_not_clicked == 0:
+        komunikat_text.write_text()
+        choose_text.write_text()
         diamonds_button.draw_button()
         diamonds_icon.draw_image()
         hearts_button.draw_button()
@@ -84,26 +130,33 @@ while True:
         spades_icon.draw_image()
         clubs_button.draw_button()
         clubs_icon.draw_image()
+        atut.write_text()
+        pygame.draw.rect(DISPLAYSURF, 'black' , atut_kwadrat , 0, 0)
         if diamonds_button.check_click():
-            print("D")
+            atut_diamonds_icon.draw_image()
             pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
             button_not_clicked = 1
+            main_game.alert = 200
             time.sleep(0.2)
         elif clubs_button.check_click():
-            print("C")
+            atut_clubs_icon.draw_image()
             pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
             button_not_clicked = 1
+            main_game.alert = 100
             time.sleep(0.2)
         elif hearts_button.check_click():
-            print("H")
+            atut_hearts_icon.draw_image()
             pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
             button_not_clicked = 1
+            main_game.alert = 300
             time.sleep(0.2)
         elif spades_button.check_click():
-            print("S")
+            atut_spades_icon.draw_image()
             time.sleep(0.2)
             pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
+            main_game.alert = 400
             button_not_clicked = 1
+
         
 
 
@@ -111,7 +164,6 @@ while True:
         print(winner)
         lewa_done = 0
         time.sleep(1)
-        #wyswietlanie wygranego do zrobienia tutaj i licznik punktow, gui gotowe
         if winner == 2:
             S.winning_display()
         elif winner == 3:
@@ -124,13 +176,35 @@ while True:
         time.sleep(2)
         pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
     if ((N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn)%52) == 0 and (N.cards_drawn + W.cards_drawn + E.cards_drawn + S.cards_drawn) > 51: 
-        GUI.player_draw.USED_CARDS = []
+        pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
+        koncowy_komunikat.draw_image()
+        koncowy_stan_gry.write_text()
+        pygame.draw.rect(DISPLAYSURF, GREEN , ((894, 652), (14,26)) , 0, 0) #S
+        pygame.draw.rect(DISPLAYSURF, GREEN , ((1107, 444), (26,13)) , 0, 0) #E
+        pygame.draw.rect(DISPLAYSURF, GREEN , ((894, 222), (14,26)) , 0, 0) #N
+        pygame.draw.rect(DISPLAYSURF, GREEN , ((667, 444), (26,13)) , 0, 0) #W
+        pygame.display.update()
+        time.sleep(3)
+        pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
         N = GUI.player_draw((710,150), 0, (100, 140), (850, 260), "N")
         S = GUI.player_draw((710,750), 0, (100, 140), (850, 500), "S")
         E = GUI.player_draw((1225, 640), 90, (140, 100), (940, 400), "E")
         W = GUI.player_draw((560, 280), 90, (140, 100), (720, 400), "W")
+        main_game = game.Game(N_player=copy.copy(game.Player()),W_player=copy.copy(game.Player()),S_player=copy.copy(game.Player()),E_player=copy.copy(game.Player()))
+        main_game.setrandom()
+        N.update_hand(main_game.players[0].hand)
+        S.update_hand(main_game.players[2].hand)
+        E.update_hand(main_game.players[1].hand)
+        W.update_hand(main_game.players[3].hand)
         if_clicked = 1
         gra_active = 0
+        button_not_clicked = 0
+        main_game.on_move = 3
+        
+        
+
+
+        
         #N.hand()
         #S.hand()
         #E.hand()
@@ -141,9 +215,10 @@ while True:
         #W.sort_hand()
     
     
-    
-    if (my_button.check_click()) and if_clicked == 1:
-            
+    if button_not_clicked == 1:
+        my_button.draw_button()
+        if (my_button.check_click()) and if_clicked == 1:
+            pygame.draw.rect(DISPLAYSURF, GREEN , bridgev2 , 0, 0)
             gra_active = 1
             for g in main_game.players[0].hand:
                 
@@ -166,7 +241,7 @@ while True:
                 E.card(g, tuple(x + y for x, y in zip(E.position, N_place)), "E")
                 E.draw(DISPLAYSURF)
                 N_place = tuple(x - y for x, y in zip(N_place, change2))
-               
+            
             N_place = (0, 0)
             
             for g in main_game.players[3].hand:
@@ -176,6 +251,7 @@ while True:
                 N_place = tuple(x - y for x, y in zip(N_place, change2))
             time.sleep(0.2)   
             N_place = (0, 0)
+            button_not_clicked = 2
     if main_game.on_move == 0 and gra_active == 1:
         possible = main_game.players[0].possible_moves(main_game.main_color)
         
